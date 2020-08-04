@@ -1,5 +1,4 @@
 ![GitHub](https://img.shields.io/github/license/EnderIce2/WhatsApp-Wine?style=for-the-badge)
-![GitHub Releases](https://img.shields.io/github/downloads/EnderIce2/WhatsApp-Wine/latest/total?style=for-the-badge)
 
 # WhatsApp-Wine
 
