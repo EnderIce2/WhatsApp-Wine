@@ -9,8 +9,8 @@ Out Of The Box [WhatsApp](https://www.whatsapp.com/) Installer for Linux using [
 ## 📔 Table Of Contents
 
 - [Why](#Why)
-- [Installing Prerequisites](#Installing-Prerequisites)
-- [Note](#Note)
+- [Installing Prerequisites](#book-Installing-Prerequisites)
+- [Note](#🖊️Note)
 
 ---
 
