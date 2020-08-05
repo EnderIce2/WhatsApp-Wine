@@ -6,14 +6,6 @@ Out Of The Box [WhatsApp](https://www.whatsapp.com/) Installer for Linux using [
 
 ---
 
-## 📔 Table Of Contents
-
-- [Why](#Why)
-- [Installing Prerequisites](#book-Installing-Prerequisites)
-- [Note](#🖊️Note)
-
----
-
 ### Why?
 Simple. My friends want to try Linux for first time and it's too hard to understand Wine and manually configure everything. So, I made this simple script to help everyone that have trouble installing WhatsApp on Linux without any port or from your web browser. 
 
