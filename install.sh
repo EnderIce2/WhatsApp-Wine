@@ -6,7 +6,7 @@
 ## installed
 ## not_installed
 ## prefix.conf (prefix)
-SCRIPT_VERSION="1.0" ## Version
+SCRIPT_VERSION="1.2" ## Version
 echo "SCRIPT VERSION $SCRIPT_VERSION" ## Writing version
 CONFIG_FILE=/home/$USER/.config/WhatsApp-wine/prefix.conf ## Reading Wine prefix
 if [ -f "$CONFIG_FILE" ]; then ## If exists prefix.conf
