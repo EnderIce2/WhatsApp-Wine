@@ -86,7 +86,7 @@ repair_whatsapp() ## Repair the installation without taking all steps again
     if [ -f "$WHATSAPP_FILE" ]; then
         read -p "Do you want to run WhatsApp now? [Y/n]: " answer
         answer=${answer:Y}
-        [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEARCH=win64 wine "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
+        [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$wineConfigPrefix" wine "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
         rm -f /home/$USER/.config/WhatsApp-wine/not_installed
         exit 0
     else 
@@ -129,7 +129,7 @@ if [ -f "$FILE_CONFIG" ]; then
     echo "===================================="
     read -p "> " ru_answer
     ru_answer=${ru_answer:U}
-    [[ $ru_answer =~ [Ss] ]] && WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEARCH=win64 wine "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
+    [[ $ru_answer =~ [Ss] ]] && WINEPREFIX="/home/$USER/$wineConfigPrefix" wine "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
     [[ $ru_answer =~ [Ff] ]] && blackscreen_whatsapp
     [[ $ru_answer =~ [Kk] ]] && killserver_whatsapp
     [[ $ru_answer =~ [Rr] ]] && repair_whatsapp
@@ -267,7 +267,7 @@ WHATSAPP_FILE=/home/$USER/$winePrefixName/drive_c/users/$USER/Application\ Data/
 if [ -f "$WHATSAPP_FILE" ]; then ## Check if WhatsApp.exe is there
     read -p "Do you want to run WhatsApp now? [Y/n]: " answer
     answer=${answer:Y}
-    [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$winePrefixName" WINEARCH=win64 wine "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
+    [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$winePrefixName" wine "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
     rm -f /home/$USER/.config/WhatsApp-wine/not_installed
 else 
     echo "WhatsApp seems that it's not succesfully installed. This may be a bug or something. Try running again this script to fix the problem."
