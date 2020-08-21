@@ -226,7 +226,11 @@ echo "[Desktop Entry]" >> /home/$USER/.local/share/applications/wine-whatsapp.de
 echo "Type=Application" >> /home/$USER/.local/share/applications/wine-whatsapp.desktop
 echo "Categories=Network;" >> /home/$USER/.local/share/applications/wine-whatsapp.desktop
 echo "Name=WhatsApp" >> /home/$USER/.local/share/applications/wine-whatsapp.desktop
-echo "Exec=env WINEPREFIX=\"/home/$USER/$winePrefixName\" WINEARCH=win64 wine C:\\\\\\\\windows\\\\\\\\command\\\\\\\\start.exe /Unix \"/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe\"" >> /home/$USER/.local/share/applications/wine-whatsapp.desktop
+if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+    echo "Exec=env WINEPREFIX=\"/home/$USER/$winePrefixName\" WINEARCH=win64 wine C:\\\\\\\\windows\\\\\\\\command\\\\\\\\start.exe /Unix \"/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe\"" >> /home/$USER/.local/share/applications/wine-whatsapp.desktop
+else
+    echo "Exec=env WINEPREFIX=\"/home/$USER/$winePrefixName\" WINEARCH=win32 wine C:\\\\\\\\windows\\\\\\\\command\\\\\\\\start.exe /Unix \"/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe\"" >> /home/$USER/.local/share/applications/wine-whatsapp.desktop
+fi
 echo "StartupNotify=true" >> /home/$USER/.local/share/applications/wine-whatsapp.desktop
 echo "Terminal=false" >> /home/$USER/.local/share/applications/wine-whatsapp.desktop
 echo "X-KeepTerminal=false" >> /home/$USER/.local/share/applications/wine-whatsapp.desktop
