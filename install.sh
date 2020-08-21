@@ -270,6 +270,6 @@ if [ -f "$WHATSAPP_FILE" ]; then ## Check if WhatsApp.exe is there
     [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$winePrefixName" wine "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
     rm -f /home/$USER/.config/WhatsApp-wine/not_installed
 else 
-    echo "WhatsApp seems that it's not succesfully installed. This may be a bug or something. Try running again this script to fix the problem."
+    echo "WhatsApp seems that it's not successfully installed. This may be a bug or something. Try running again this script to fix the problem."
     touch /home/$USER/.config/WhatsApp-wine/not_installed
 fi
