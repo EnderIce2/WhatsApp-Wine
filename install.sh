@@ -6,7 +6,10 @@
 ## installed
 ## not_installed
 ## prefix.conf (prefix)
-SCRIPT_VERSION="1.3" ## Version
+
+# TODO: app.ico is buggy in gnome-shell
+
+SCRIPT_VERSION="1.4" ## Version
 echo "SCRIPT VERSION $SCRIPT_VERSION" ## Writing version
 CONFIG_FILE=/home/$USER/.config/WhatsApp-wine/prefix.conf ## Reading Wine prefix
 if [ -f "$CONFIG_FILE" ]; then ## If exists prefix.conf
@@ -18,14 +21,6 @@ killserver_whatsapp() ## Kill WhatsApp.exe and other processes
 {
     echo "Please wait..."
     WINEPREFIX="/home/$USER/$wineConfigPrefix" wineserver -k ## Kill all wine processes under config prefix
-    echo "Done"
-    exit 0
-}
-
-blackscreen_whatsapp() ## Fix black screen
-{
-    echo "Please wait..."
-    WINEPREFIX="/home/$USER/$wineConfigPrefix" winetricks -q nocrashdialog winxp > /dev/null 2>&1 ## Set the Wine to Windows XP, this sometimes fixes black screen on .NET applications even if those applications are made for newer version of Windows
     echo "Done"
     exit 0
 }
@@ -71,7 +66,7 @@ repair_whatsapp() ## Repair the installation without taking all steps again
     read -p 'Press <enter> to continue'
     clear
     echo "Installing dotnet45 in $wineConfigPrefix"
-    WINEPREFIX="/home/$USER/$wineConfigPrefix" winetricks -q nocrashdialog dotnet45 win7
+    WINEPREFIX="/home/$USER/$wineConfigPrefix" winetricks -q nocrashdialog dotnet45 dxvk win10
     echo "Removing useless files..."
     rm ${files[0]}
     rm background.gif
@@ -121,7 +116,6 @@ if [ -f "$FILE_CONFIG" ]; then
     echo "WhatsApp Wine is already installed ($wineConfigPrefix) [Script v$SCRIPT_VERSION]"
     echo "===================================="
     echo "| Start WhatsApp          [S]      |"
-    echo "| Black Screen Window Fix [F]      |"
     echo "| Kill WhatsApp           [K]      |"
     echo "| Repair                  [R]      |"
     echo "| Uninstall               [U]      |"
@@ -130,7 +124,6 @@ if [ -f "$FILE_CONFIG" ]; then
     read -p "> " ru_answer
     ru_answer=${ru_answer:U}
     [[ $ru_answer =~ [Ss] ]] && WINEPREFIX="/home/$USER/$wineConfigPrefix" wine "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
-    [[ $ru_answer =~ [Ff] ]] && blackscreen_whatsapp
     [[ $ru_answer =~ [Kk] ]] && killserver_whatsapp
     [[ $ru_answer =~ [Rr] ]] && repair_whatsapp
     [[ $ru_answer =~ [Uu] ]] && uninstall_whatsapp
@@ -193,32 +186,28 @@ clear
 read -p 'Name your Wine prefix (ex: .whatsapp, .whatsapp-wine, etc...): ' winePrefixName
 echo $winePrefixName > /home/$USER/.config/WhatsApp-wine/prefix.conf
 echo "Creating directory..."
+mkdir -p "/home/$USER/$winePrefixName"
 mkdir -p "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp"
 echo "Copying files..."
 cp setupIcon.ico "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/app.ico"
 cp -r $PWD/lib/net45/* "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp"
 echo "Creating prefix for $MACHINE_TYPE..."
-echo -e "\e[5m[ NOTE ]\e[25m"
-echo "When \"Wine configurator\" shows up, just click \"OK\"."
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then ## Create 64 or 32 bit Wine prefix
-    WINEPREFIX="/home/$USER/$winePrefixName" WINEARCH=win64 winecfg > /dev/null 2>&1
+    WINEPREFIX="/home/$USER/$winePrefixName" WINEARCH=win64 wine stub > /dev/null 2>&1
 else
-    WINEPREFIX="/home/$USER/$winePrefixName" WINEARCH=win32 winecfg > /dev/null 2>&1
+    WINEPREFIX="/home/$USER/$winePrefixName" WINEARCH=win32 wine stub > /dev/null 2>&1
 fi
 clear
 echo -e "\e[5m[ NOTE ]\e[25m"
 echo "If you got stuck with"
 echo "\"Running /usr/bin/wineserver -w. This will hang until all wine processes in prefix=/home/$USER/$winePrefixName terminate\""
-echo "Or"
-echo "\"0614:err:ntdll:RtlpWaitForCriticalSection section 7BC6C600 \"loader.c: fls_section\" wait timed out in thread 0614, blocked by 0558, retrying (60 sec)\""
-echo "Or something else like that"
 echo "Open another Terminal and paste this:"
 echo -e "\e[7mWINEPREFIX=\"/home/$USER/$winePrefixName\" wineserver -k\e[27m"
 echo "This process may take a while!"
 read -p 'Press <enter> to continue'
 clear
-echo "Installing dotnet45 in $winePrefixName"
-WINEPREFIX="/home/$USER/$winePrefixName" winetricks -q nocrashdialog dxvk dotnet45 win7 ## Adding 'nocrashdialog' so no errors should appear
+echo "Installing dotnet45 and dxvk in $winePrefixName"
+WINEPREFIX="/home/$USER/$winePrefixName" winetricks -q nocrashdialog dotnet45 dxvk win10
 
 rm -f /home/$USER/.local/share/applications/wine-whatsapp.desktop
 echo "Adding shortcut..."
