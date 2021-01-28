@@ -7,9 +7,9 @@
 ## not_installed
 ## prefix.conf (prefix)
 
-# TODO: app.ico is buggy in gnome-shell
+## TODO: app.ico is buggy in gnome-shell
 
-SCRIPT_VERSION="1.4" ## Version
+SCRIPT_VERSION="1.4.1" ## Version
 echo "SCRIPT VERSION $SCRIPT_VERSION" ## Writing version
 CONFIG_FILE=/home/$USER/.config/WhatsApp-wine/prefix.conf ## Reading Wine prefix
 if [ -f "$CONFIG_FILE" ]; then ## If exists prefix.conf
@@ -259,6 +259,6 @@ if [ -f "$WHATSAPP_FILE" ]; then ## Check if WhatsApp.exe is there
     [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$winePrefixName" wine "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
     rm -f /home/$USER/.config/WhatsApp-wine/not_installed
 else 
-    echo "WhatsApp seems that it's not successfully installed. This may be a bug or something. Try running again this script to fix the problem."
+    echo "WhatsApp seems that is not successfully installed. This may be a bug or something. Try running again this script to fix the problem."
     touch /home/$USER/.config/WhatsApp-wine/not_installed
 fi
