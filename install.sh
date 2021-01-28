@@ -6,7 +6,7 @@
 ## installed
 ## not_installed
 ## prefix.conf (prefix)
-SCRIPT_VERSION="1.2" ## Version
+SCRIPT_VERSION="1.3" ## Version
 echo "SCRIPT VERSION $SCRIPT_VERSION" ## Writing version
 CONFIG_FILE=/home/$USER/.config/WhatsApp-wine/prefix.conf ## Reading Wine prefix
 if [ -f "$CONFIG_FILE" ]; then ## If exists prefix.conf
@@ -218,7 +218,7 @@ echo "This process may take a while!"
 read -p 'Press <enter> to continue'
 clear
 echo "Installing dotnet45 in $winePrefixName"
-WINEPREFIX="/home/$USER/$winePrefixName" winetricks -q nocrashdialog dotnet45 win7 ## Adding 'nocrashdialog' so no errors should appear
+WINEPREFIX="/home/$USER/$winePrefixName" winetricks -q nocrashdialog dxvk dotnet45 win7 ## Adding 'nocrashdialog' so no errors should appear
 
 rm -f /home/$USER/.local/share/applications/wine-whatsapp.desktop
 echo "Adding shortcut..."
