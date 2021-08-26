@@ -39,3 +39,6 @@ cd /tmp && git clone https://github.com/EnderIce2/WhatsApp-Wine/whatsapp-wine.sh
 - I'm not sure if on other Linux distributions works
 - I tested this script on Ubuntu 20.04, Fedora 32 and OpenSUSE Leap 15.2
 - I made it to work the best on Ubuntu 20.04, in the future maybe I will make it for other distributions.
+
+### TODO
+- Save script file
