@@ -11,19 +11,24 @@ Simple. My friends want to try Linux for first time and it's too hard to underst
 
 ---
 
+### 📥 Downloading and installing everything
+All you have to do is to paste the following into your terminal:
+
+```bash
+cd /tmp && git clone https://github.com/EnderIce2/WhatsApp-Wine/whatsapp-wine.sh && chmod +x ./whatsapp-wine.sh && ./whatsapp-wine.sh
+```
+
+ℹ️ Make sure you have the latest version of [Wine](https://wiki.winehq.org/) (minimum 6.15)
+
 ### 📖 Installing Prerequisites
 - Ubuntu
   - [Wine Stable](https://wiki.winehq.org/Ubuntu)
-  - p7zip-rar (`sudo apt install p7zip-rar`)
-  - winetricks (`sudo apt install winetricks`)
+  - Packages (`sudo apt install p7zip-rar winetricks imagemagick`)
 - Fedora
   - [Wine Stable](https://wiki.winehq.org/Fedora)
-  - p7zip-rar (`sudo dnf install p7zip`)
-  - winetricks (`sudo dnf install winetricks`)
+  - Packages (`sudo dnf install p7zip winetricks imagemagick`)
 - OpenSUSE
-  - Wine Stable (`sudo zypper install wine`)
-  - p7zip-full (`sudo zypper install p7zip-full`)
-  - winetricks (`sudo zypper install winetricks`)
+  - Packages (`sudo zypper install wine p7zip-full winetricks imagemagick`)
 
 ℹ️ Winetricks should be installed automatically with Wine.
 

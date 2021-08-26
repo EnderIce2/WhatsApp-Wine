@@ -9,7 +9,7 @@
 
 ## TODO: app.ico is buggy in gnome-shell
 
-SCRIPT_VERSION="1.4.1" ## Version
+SCRIPT_VERSION="1.4.2" ## Version
 echo "SCRIPT VERSION $SCRIPT_VERSION" ## Writing version
 CONFIG_FILE=/home/$USER/.config/WhatsApp-wine/prefix.conf ## Reading Wine prefix
 if [ -f "$CONFIG_FILE" ]; then ## If exists prefix.conf
@@ -44,14 +44,15 @@ repair_whatsapp() ## Repair the installation without taking all steps again
     echo -e "\e[5m[ NOTE ]\e[25m"
     echo "When \"Wine configurator\" shows up, just click \"OK\"."
     if [ ${MACHINE_TYPE} == 'x86_64' ]; then
-        WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEARCH=win64 winecfg > /dev/null 2>&1
+        WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEDEBUG=-all WINEARCH=win64 winecfg > /dev/null 2>&1
     else
-        WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEARCH=win32 winecfg > /dev/null 2>&1
+        WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEDEBUG=-all WINEARCH=win32 winecfg > /dev/null 2>&1
     fi
     echo "Creating directory..."
     mkdir -p "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp"
     echo "Copying files..."
-    cp setupIcon.ico "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/app.ico"
+    convert "setupIcon.ico" -thumbnail 256x256 -alpha on -background none -flatten "favicon.png"
+    cp favicon.png "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/app.ico"
     cp -r $PWD/lib/net45/* "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp"
     clear
     echo -e "\e[5m[ NOTE ]\e[25m"
@@ -66,7 +67,7 @@ repair_whatsapp() ## Repair the installation without taking all steps again
     read -p 'Press <enter> to continue'
     clear
     echo "Installing dotnet45 in $wineConfigPrefix"
-    WINEPREFIX="/home/$USER/$wineConfigPrefix" winetricks -q nocrashdialog dotnet45 dxvk win10
+    WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEDEBUG=-all winetricks -q nocrashdialog dotnet45 win10
     echo "Removing useless files..."
     rm ${files[0]}
     rm background.gif
@@ -75,13 +76,14 @@ repair_whatsapp() ## Repair the installation without taking all steps again
     rm tmp
     rm -r $PWD/lib
     rm setupIcon.ico
+    rm favicon.png
     echo "Checking for files..."
     touch /home/$USER/.config/WhatsApp-wine/installed
     WHATSAPP_FILE=/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application\ Data/WhatsApp/WhatsApp.exe
     if [ -f "$WHATSAPP_FILE" ]; then
         read -p "Do you want to run WhatsApp now? [Y/n]: " answer
         answer=${answer:Y}
-        [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$wineConfigPrefix" wine "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
+        [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEDEBUG=-all wine "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
         rm -f /home/$USER/.config/WhatsApp-wine/not_installed
         exit 0
     else 
@@ -110,6 +112,18 @@ about_whatsapp() ## Shows credit and this script version
     exit 0
 }
 
+winecfg_whatsapp() ## Shows credit and this script version
+{
+    WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEDEBUG=-all winecfg
+    exit 0
+}
+
+winetricks_whatsapp() ## Shows credit and this script version
+{
+    WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEDEBUG=-all winetricks -q
+    exit 0
+}
+
 FILE_CONFIG=/home/$USER/.config/WhatsApp-wine/installed
 echo "$FILE_CONFIG"
 if [ -f "$FILE_CONFIG" ]; then
@@ -117,14 +131,18 @@ if [ -f "$FILE_CONFIG" ]; then
     echo "===================================="
     echo "| Start WhatsApp          [S]      |"
     echo "| Kill WhatsApp           [K]      |"
+    echo "| Winecfg                 [W]      |"
+    echo "| Winetricks              [T]      |"
     echo "| Repair                  [R]      |"
     echo "| Uninstall               [U]      |"
     echo "| About This Script       [A]      |"
     echo "===================================="
     read -p "> " ru_answer
     ru_answer=${ru_answer:U}
-    [[ $ru_answer =~ [Ss] ]] && WINEPREFIX="/home/$USER/$wineConfigPrefix" wine "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
+    [[ $ru_answer =~ [Ss] ]] && WINEPREFIX="/home/$USER/$wineConfigPrefix" WINEDEBUG=-all wine "/home/$USER/$wineConfigPrefix/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
     [[ $ru_answer =~ [Kk] ]] && killserver_whatsapp
+    [[ $ru_answer =~ [Ww] ]] && winecfg_whatsapp
+    [[ $ru_answer =~ [Tt] ]] && winetricks_whatsapp
     [[ $ru_answer =~ [Rr] ]] && repair_whatsapp
     [[ $ru_answer =~ [Uu] ]] && uninstall_whatsapp
     [[ $ru_answer =~ [Aa] ]] && about_whatsapp
@@ -141,7 +159,7 @@ else
     echo "| Install it here: https://wiki.winehq.org/Download        |"
     echo "============================================================"
     echo "Wine not installed."
-    exit 0
+    exit 1
 fi
 ## I should make that automatically installs prerequisites for every distribution
 if winetricks --version > /dev/null 2>&1 ; then ## Check if Winetricks is installed
@@ -152,7 +170,7 @@ else
         echo "Winetricks installed"
     else
         echo "Winetricks still not installed"
-        exit 0
+        exit 1
     fi
 fi
 
@@ -164,7 +182,18 @@ else
         echo "p7zip-rar installed"
     else
         echo "p7zip-rar still not installed"
-        exit 0
+        exit 1
+    fi
+fi
+if convert -version > /dev/null 2>&1 ; then ## Check if 7z is installed
+    echo "imagemagick installed"
+else
+    sudo apt install imagemagick -y
+    if 7z > /dev/null 2>&1 ; then
+        echo "imagemagick installed"
+    else
+        echo "imagemagick still not installed"
+        exit 1
     fi
 fi
 clear
@@ -189,13 +218,14 @@ echo "Creating directory..."
 mkdir -p "/home/$USER/$winePrefixName"
 mkdir -p "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp"
 echo "Copying files..."
-cp setupIcon.ico "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/app.ico"
+convert "setupIcon.ico" -thumbnail 256x256 -alpha on -background none -flatten "favicon.png"
+cp favicon.png "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/app.ico"
 cp -r $PWD/lib/net45/* "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp"
 echo "Creating prefix for $MACHINE_TYPE..."
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then ## Create 64 or 32 bit Wine prefix
-    WINEPREFIX="/home/$USER/$winePrefixName" WINEARCH=win64 wine stub > /dev/null 2>&1
+    WINEPREFIX="/home/$USER/$winePrefixName" WINEDEBUG=-all WINEARCH=win64 wine stub > /dev/null 2>&1
 else
-    WINEPREFIX="/home/$USER/$winePrefixName" WINEARCH=win32 wine stub > /dev/null 2>&1
+    WINEPREFIX="/home/$USER/$winePrefixName" WINEDEBUG=-all WINEARCH=win32 wine stub > /dev/null 2>&1
 fi
 clear
 echo -e "\e[5m[ NOTE ]\e[25m"
@@ -206,8 +236,8 @@ echo -e "\e[7mWINEPREFIX=\"/home/$USER/$winePrefixName\" wineserver -k\e[27m"
 echo "This process may take a while!"
 read -p 'Press <enter> to continue'
 clear
-echo "Installing dotnet45 and dxvk in $winePrefixName"
-WINEPREFIX="/home/$USER/$winePrefixName" winetricks -q nocrashdialog dotnet45 dxvk win10
+echo "Installing dotnet45 in $winePrefixName"
+WINEPREFIX="/home/$USER/$winePrefixName" WINEDEBUG=-all winetricks -q nocrashdialog dotnet45 win10
 
 rm -f /home/$USER/.local/share/applications/wine-whatsapp.desktop
 echo "Adding shortcut..."
@@ -237,6 +267,7 @@ rm RELEASES
 rm Update.exe
 rm tmp
 rm -r $PWD/lib
+rm favicon.png
 rm setupIcon.ico
 clear
 cat << "EOF"
@@ -256,7 +287,7 @@ WHATSAPP_FILE=/home/$USER/$winePrefixName/drive_c/users/$USER/Application\ Data/
 if [ -f "$WHATSAPP_FILE" ]; then ## Check if WhatsApp.exe is there
     read -p "Do you want to run WhatsApp now? [Y/n]: " answer
     answer=${answer:Y}
-    [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$winePrefixName" wine "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
+    [[ $answer =~ [Yy] ]] && WINEPREFIX="/home/$USER/$winePrefixName" WINEDEBUG=-all wine "/home/$USER/$winePrefixName/drive_c/users/$USER/Application Data/WhatsApp/WhatsApp.exe"
     rm -f /home/$USER/.config/WhatsApp-wine/not_installed
 else 
     echo "WhatsApp seems that is not successfully installed. This may be a bug or something. Try running again this script to fix the problem."
