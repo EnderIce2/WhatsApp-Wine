@@ -15,7 +15,7 @@ Simple. My friends want to try Linux for first time and it's too hard to underst
 All you have to do is to paste the following into your terminal:
 
 ```bash
-cd /tmp && wget https://github.com/EnderIce2/WhatsApp-Wine/whatsapp-wine.sh && chmod +x ./whatsapp-wine.sh && ./whatsapp-wine.sh
+cd /tmp && wget https://raw.githubusercontent.com/EnderIce2/WhatsApp-Wine/master/whatsapp-wine.sh && chmod +x ./whatsapp-wine.sh && ./whatsapp-wine.sh
 ```
 
 ℹ️ Make sure you have the latest version of [Wine](https://wiki.winehq.org/) (minimum 6.15)
