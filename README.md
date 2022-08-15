@@ -1,3 +1,7 @@
+# THIS SCRIPT IS NO LONGER SUPPORTED
+
+---
+
 ![GitHub](https://img.shields.io/github/license/EnderIce2/WhatsApp-Wine?style=for-the-badge)
 
 # WhatsApp-Wine
@@ -31,6 +35,18 @@ cd /tmp && wget https://raw.githubusercontent.com/EnderIce2/WhatsApp-Wine/master
   - Packages (`sudo zypper install wine p7zip-full winetricks imagemagick`)
 
 ℹ️ Winetricks should be installed automatically with Wine.
+
+---
+
+### 💿 Uninstall
+
+#### Automatically
+
+Run ./whatsapp-wine.sh and select `Uninstall` option.
+
+#### Manually
+
+Remove `/home/$USER/.local/share/applications/wine-whatsapp.desktop`, `/home/$USER/<prefix name>` and `/home/$USER/.config/WhatsApp-wine`
 
 ---
 
